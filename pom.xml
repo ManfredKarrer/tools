@@ -7,6 +7,53 @@
     <groupId>bisq</groupId>
     <artifactId>tools</artifactId>
     <version>1.0</version>
+
+    <build>
+        <finalName>tools</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <!-- broken with Java 8 (MSHADE-174), using ProGuard instead. -->
+                    <minimizeJar>false</minimizeJar>
+                    <transformers>
+                        <transformer
+                                implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                            <mainClass>bisq.tools.DeterministicBuildTool</mainClass>
+                        </transformer>
+                    </transformers>
+                    <filters>
+                        <filter>
+                            <!-- exclude signatures, the bundling process breaks them for some reason -->
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/*.SF</exclude>
+                                <exclude>META-INF/*.DSA</exclude>
+                                <exclude>META-INF/*.RSA</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>bundled</shadedClassifierName>
+                            <finalName>tools-1.0</finalName>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>io.github.zlika</groupId>

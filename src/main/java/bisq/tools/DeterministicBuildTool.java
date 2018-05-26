@@ -19,7 +19,7 @@ package bisq.tools;
 
 import io.github.zlika.reproducible.StipZipFile;
 
-public class ReproducibleBuildTool {
+public class DeterministicBuildTool {
     public static void main(String[] args) throws Throwable {
         StipZipFile.strip(args[0]);
     }
